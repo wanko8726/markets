@@ -43,15 +43,26 @@
         <table id="market-cap-table" class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>通貨名</th>
-                <th scope="col">価格(参考)</th>
-                <th scope="col">1h</th>
-                <th scope="col">24h</th>
-                <th scope="col">7d</th>
-                <th scope="col">24h 取引量</th>
-                <th scope="col">規模</th>
-                <th scope="col">グラフ</th>
-                <th scope="col">市場規模/取引高</th>
+                <th class="text-center" colspan="2">通貨</th>
+                <th class="text-center" rowspan="2">価格</th>
+                <th class="text-center" colspan="3">値動き</th>
+                <th class="text-center" colspan="3">市場</th>
+                <th class="text-center" colspan="5">グラフ</th>
+            </tr>
+            <tr>
+                <th class="text-center">名称</th>
+                <th class="text-center">略称</th>
+                <th class="text-center">1h</th>
+                <th class="text-center">24h</th>
+                <th class="text-center">7d</th>
+                <th class="text-center">24h<br>取引(t)</th>
+                <th class="text-center">規模(m)</th>
+                <th class="text-center width-auto">比率(t/m)</th>
+                <th class="text-center">24h</th>
+                <th class="text-center">7d</th>
+                <th class="text-center">30d</th>
+                <th class="text-center">60d</th>
+                <th class="text-center">90d</th>
             </tr>
             </thead>
             <tbody id="market-cap-table-body">
@@ -69,6 +80,7 @@
                         console.log(cryptoCurrencyList)
                         cryptoCurrencyList.forEach((currency) => {
                             var tr = document.createElement("tr")
+                            var tdName = document.createElement("td")
                             var tdSymbol = document.createElement("td")
                             var tdPrice = document.createElement("td")
                             var td1h = document.createElement("td")
@@ -76,21 +88,58 @@
                             var td7d = document.createElement("td")
                             var td24hVolume = document.createElement("td")
                             var tdMarketCap = document.createElement("td")
-                            var tdSparkline = document.createElement("td")
                             var td24hPerMarket = document.createElement("td")
+                            var td1dSparkline = document.createElement("td")
+                            var td7dSparkline = document.createElement("td")
+                            var td30dSparkline = document.createElement("td")
+                            var td60dSparkline = document.createElement("td")
+                            var td90dSparkline = document.createElement("td")
+
+                            var aName = document.createElement("a")
+                            aName.setAttribute("href", "https://coinmarketcap.com/currencies/" + currency["slug"])
+                            aName.append(currency["name"])
 
                             var aSymbol = document.createElement("a")
                             aSymbol.setAttribute("href", "https://coinmarketcap.com/currencies/" + currency["slug"])
-                            aSymbol.append(currency["name"] + "(" + currency["symbol"] + ")")
+                            aSymbol.append(currency["symbol"])
 
-                            var imgSparkline = document.createElement("img")
-                            imgSparkline.setAttribute("class", "lazyload")
-                            // imgSparkline.setAttribute("data-src", "https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/" + currency["id"] + ".svg")
-                            imgSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/" + currency["id"] + ".svg")
-                            imgSparkline.setAttribute("alt", "sparkline")
+                            var img1dSparkline = document.createElement("img")
+                            img1dSparkline.setAttribute("class", "lazyload")
+                            img1dSparkline.setAttribute("loading", "lazy")
+                            img1dSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/1d/2781/" + currency["id"] + ".svg")
+                            img1dSparkline.setAttribute("alt", "sparkline")
+
+                            
+                            var img7dSparkline = document.createElement("img")
+                            img7dSparkline.setAttribute("class", "lazyload")
+                            img7dSparkline.setAttribute("loading", "lazy")
+                            img7dSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/" + currency["id"] + ".svg")
+                            img7dSparkline.setAttribute("alt", "sparkline")
+
+                            
+                            var img30dSparkline = document.createElement("img")
+                            img30dSparkline.setAttribute("class", "lazyload")
+                            img30dSparkline.setAttribute("loading", "lazy")
+                            img30dSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/30d/2781/" + currency["id"] + ".svg")
+                            img30dSparkline.setAttribute("alt", "sparkline")
+
+                            
+                            var img60dSparkline = document.createElement("img")
+                            img60dSparkline.setAttribute("class", "lazyload")
+                            img60dSparkline.setAttribute("loading", "lazy")
+                            img60dSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/60d/2781/" + currency["id"] + ".svg")
+                            img60dSparkline.setAttribute("alt", "sparkline")
+
+                            
+                            var img90dSparkline = document.createElement("img")
+                            img90dSparkline.setAttribute("class", "lazyload")
+                            img90dSparkline.setAttribute("loading", "lazy")
+                            img90dSparkline.setAttribute("src", "https://s3.coinmarketcap.com/generated/sparklines/web/90d/2781/" + currency["id"] + ".svg")
+                            img90dSparkline.setAttribute("alt", "sparkline")
 
                             var quote = currency["quotes"][0]
 
+                            tdName.append(aName)
                             tdSymbol.append(aSymbol)
                             tdPrice.append(quote["price"].toFixed(5))
                             td1h.append(quote["percentChange1h"].toFixed(2) + "%")
@@ -98,11 +147,15 @@
                             td7d.append(quote["percentChange7d"].toFixed(2) + "%")
                             td24hVolume.append(quote["volume24h"].toFixed(2))
                             tdMarketCap.append(quote["marketCap"].toFixed(2))
-                            tdSparkline.append(imgSparkline)
                             if(quote["volume24h"] !== 0.0 && quote["marketCap"] !== 0.0){
                                 td24hPerMarket.append((quote["volume24h"] / quote["marketCap"]).toFixed(2))
                             }
 
+                            td1dSparkline.append(img1dSparkline)
+                            td7dSparkline.append(img7dSparkline)
+                            td30dSparkline.append(img30dSparkline)
+                            td60dSparkline.append(img60dSparkline)
+                            td90dSparkline.append(img90dSparkline)
 
                             tdPrice.setAttribute("class", "text-right")
                             td1h.setAttribute("class", "text-right")
@@ -112,6 +165,7 @@
                             tdMarketCap.setAttribute("class", "text-right")
                             td24hPerMarket.setAttribute("class", "text-right")
 
+                            tr.appendChild(tdName)
                             tr.appendChild(tdSymbol)
                             tr.appendChild(tdPrice)
                             tr.appendChild(td1h)
@@ -119,8 +173,12 @@
                             tr.appendChild(td7d)
                             tr.appendChild(td24hVolume)
                             tr.appendChild(tdMarketCap)
-                            tr.appendChild(tdSparkline)
                             tr.appendChild(td24hPerMarket)
+                            tr.appendChild(td1dSparkline)
+                            tr.appendChild(td7dSparkline)
+                            tr.appendChild(td30dSparkline)
+                            tr.appendChild(td60dSparkline)
+                            tr.appendChild(td90dSparkline)
 
                             marketCapTableBody.append(tr)
                         })
@@ -130,7 +188,8 @@
                             function(setting, data, dataIndex){
                                 var min = parseFloat($("#market-cap-between--start").val()) || ""
                                 var max = parseFloat($("#market-cap-between--end").val()) || ""
-                                var marketCap = parseFloat(data[6]) || 0
+                                var marketCap = parseFloat(data[7]) || 0
+                                // console.log(data)
 
                                 if (min === "" && max === ""){
                                     return true
@@ -147,12 +206,18 @@
                                 if (min <= marketCap && marketCap <= max){
                                     return true
                                 }
-                                
+
                                 return false
                             }
                         )
 
-                        marketCapTable = $("#market-cap-table").DataTable()
+                        marketCapTable = $("#market-cap-table").DataTable({
+                            // columnDefs: [
+                            //     // 2列目(0から始まるため1になっています)の幅を100pxにする
+                            //     { targets: [0,1,2,3,4,5,6,7,8], width: auto }
+                            //     ]
+                            // "language":  { "decimal" : ",", "thousands": "." }?
+                        })
                         
                         $('#market-cap-between--start, #market-cap-between--end').keyup( function() {
                             marketCapTable.draw();
